@@ -1,0 +1,6 @@
+peewee
+/Users/wm/Documents/developer/byu-stats-sports/nba_py
+requests-cache
+PyMySQL
+# MySQL-python
+python-dateutil
