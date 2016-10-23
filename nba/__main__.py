@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 """The main entry point. Invoke as `nba` or `python -m nba`.
-
 """
 
 from __future__ import print_function
@@ -52,7 +51,6 @@ def main():
     logging.basicConfig(level=nba.utils.log_level(args.verbose),
                         format='%(levelname)s: %(message)s')
     start, end = args.date
-    #  nba.core.update(args.season)
     nba.core.add(args.season)
     
 if __name__ == '__main__':

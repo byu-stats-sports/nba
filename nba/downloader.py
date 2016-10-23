@@ -31,7 +31,6 @@ def fetch_players(self, season=None, only_current=1):
 
         player_id = player['PERSON_ID']
         # NOTE: assumes an NBA starts on October 1 and ends June 1
-            #  'team': player['TEAM_ID'], 
         player = {
             'player_id': player_id,
             'first_name': player['FIRST_NAME'], 
@@ -42,7 +41,6 @@ def fetch_players(self, season=None, only_current=1):
             'from_year': datetime.datetime(player['FROM_YEAR'], 10, 1),
             'to_year': datetime.datetime(player['TO_YEAR'], 6, 1),
             'position': player['POSITION'] or None,
-            #  'jersey': player['JERSEY'] or None # sometimes is 20-23
         }
 
         logger.info(player) 
@@ -66,10 +64,8 @@ def fetch_teams(self, season=None):
             del(team['YEARFOUNDED'])
         except IndexError:
             #  historical team
-            #  logger.warning('cannot fetch team details for {0}'.format(t))
-            #  del(t['LEAGUE_ID'])
-            #  team = t
             continue
+
         team['MIN_YEAR'] = datetime.datetime(int(t['MIN_YEAR']), 1, 1)
         team['MAX_YEAR'] = datetime.datetime(int(t['MAX_YEAR']), 1, 1)
         team = dict((k.lower(), v) for k, v in team.items())
@@ -79,9 +75,9 @@ def fetch_teams(self, season=None):
     return teams.values()
 
 
-def fetch_team_rosters(self, season=nba.utils.split_season(nba.CURRENT_SEASON)):
-    for t in nba_py.team.TeamList(season=season.raw).info():
-        for p in nba_py.team.TeamCommonRoster(season=season.raw).roster():
+#  def fetch_team_rosters(self, season=nba.utils.split_season(nba.CURRENT_SEASON)):
+    #  for t in nba_py.team.TeamList(season=season.raw).info():
+        #  for p in nba_py.team.TeamCommonRoster(season=season.raw).roster():
             
 
 

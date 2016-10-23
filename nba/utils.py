@@ -1,3 +1,9 @@
+import nba
+import argparse
+import logging
+from datetime import datetime, date
+
+
 def log_level(verbosity_count):
     log_level = logging.WARNING
     if verbosity_count and verbosity_count is 1:
@@ -46,7 +52,7 @@ def valid_date_range(s):
     """
     dates = []
     for date in s.split('-'):
-        dates.append(_valid_date(date))
+        dates.append(valid_date(date))
     if len(dates) is 2:
         start = dates[0]
         end = dates[1]

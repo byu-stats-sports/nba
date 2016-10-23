@@ -8,21 +8,6 @@ logger = logging.getLogger(__name__)
 
 db = connect(DATABASE_URL)
 
-#  class BaseModel(orm.Model):
-    #  def atomic_commit(stmt):
-        #  with db.atomic() as transaction:
-            #  try:
-                #  stmt.execute()
-            #  except orm.IntegrityError as e:
-                #  # Duplicate key exists
-                #  logger.warning(e)
-            #  except Exception as e:
-                #  db.rollback()
-                #  logger.error(e)
-    
-    #  class Meta:
-        #  database = db
-
 
 class Team(orm.Model):
     team_id = orm.PrimaryKeyField()
@@ -46,9 +31,8 @@ class Team(orm.Model):
         database = db
 
 
-class Player(orm.model):
+class Player(orm.Model):
     player_id = orm.PrimaryKeyField()
-    #  team = orm.ForeignKeyField(Team, to_field='team_id', related_name='team')
 
     first_name = orm.CharField()
     last_name = orm.CharField()
@@ -57,8 +41,6 @@ class Player(orm.model):
     weight = orm.IntegerField(null=True)
 
     position = orm.CharField(null=True)
-    #  rosterstatus = orm.CharField()
-    #  jersey = orm.IntegerField(null=True) 
     from_year = orm.DateField()
     to_year = orm.DateField()
 
@@ -77,7 +59,7 @@ class Player(orm.model):
         order_by = ('last_name', 'first_name', '-birthdate')
 
 
-class TeamRoster(orm.model):
+class TeamRoster(orm.Model):
     player = orm.ForeignKeyField(Player, to_field='player_id', related_name='player')
     team = orm.ForeignKeyField(Team, to_field='team_id', related_name='team')
     season_start = orm.DateField()
