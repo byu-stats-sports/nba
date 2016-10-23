@@ -1,27 +1,54 @@
 import peewee as orm
+from playhouse.db_url import connect
 import nba
-from nba import DATABASE_CONNECTION as db
+from nba import DATABASE_URL
+import logging
 
-class BaseModel(orm.Model):
+logger = logging.getLogger(__name__)
+
+db = connect(DATABASE_URL)
+
+#  class BaseModel(orm.Model):
+    #  def atomic_commit(stmt):
+        #  with db.atomic() as transaction:
+            #  try:
+                #  stmt.execute()
+            #  except orm.IntegrityError as e:
+                #  # Duplicate key exists
+                #  logger.warning(e)
+            #  except Exception as e:
+                #  db.rollback()
+                #  logger.error(e)
+    
+    #  class Meta:
+        #  database = db
+
+
+class Team(orm.Model):
+    team_id = orm.PrimaryKeyField()
+    abbreviation = orm.CharField(null=True)
+    nickname = orm.CharField(null=True)
+    min_year = orm.DateField()
+    max_year = orm.DateField()
+    city = orm.CharField(null=True)
+    arena = orm.CharField(null=True)
+    arenacapacity = orm.IntegerField(null=True)
+    owner = orm.CharField(null=True)
+    generalmanager = orm.CharField(null=True)
+    headcoach = orm.CharField(null=True)
+    dleagueaffiliation = orm.TextField(null=True)
+
+    @db.atomic()
+    def add(teams):
+        return Team.insert_many(teams).execute()
+
     class Meta:
         database = db
 
-class Team(BaseModel):
-    team_id = orm.PrimaryKeyField()
-    abbreviation = orm.CharField()
-    nickname = orm.CharField()
-    yearfounded = orm.DateField()
-    city = orm.CharField()
-    arena = orm.CharField()
-    arenacapacity = orm.IntegerField()
-    owner = orm.CharField()
-    generalmanager = orm.CharField()
-    headcoach = orm.CharField()
-    dleagueaffiliation = orm.TextField()
 
-class Player(BaseModel):
+class Player(orm.model):
     player_id = orm.PrimaryKeyField()
-    team = orm.ForeignKeyField(Team, to_field='team_id', related_name='team')
+    #  team = orm.ForeignKeyField(Team, to_field='team_id', related_name='team')
 
     first_name = orm.CharField()
     last_name = orm.CharField()
@@ -29,9 +56,9 @@ class Player(BaseModel):
     height = orm.CharField(null=True)
     weight = orm.IntegerField(null=True)
 
-    position = orm.CharField()
+    position = orm.CharField(null=True)
     #  rosterstatus = orm.CharField()
-    #  jersey = orm.IntegerField() 
+    #  jersey = orm.IntegerField(null=True) 
     from_year = orm.DateField()
     to_year = orm.DateField()
 
@@ -41,3 +68,25 @@ class Player(BaseModel):
     three_quarter_sprint = orm.DecimalField(null=True)
     bench_press = orm.IntegerField(null=True)
 
+    @db.atomic()
+    def add(players):
+        return Player.insert_many(players).execute()
+
+    class Meta:
+        database = db
+        order_by = ('last_name', 'first_name', '-birthdate')
+
+
+class TeamRoster(orm.model):
+    player = orm.ForeignKeyField(Player, to_field='player_id', related_name='player')
+    team = orm.ForeignKeyField(Team, to_field='team_id', related_name='team')
+    season_start = orm.DateField()
+    season_end = orm.DateField()
+    
+    class Meta:
+        database = db
+        db_table = 'team_roster'
+
+
+def create_tables():
+    db.create_tables([Team, Player, TeamRoster], safe=True)
