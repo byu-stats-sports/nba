@@ -3,11 +3,12 @@ import nba_py.team
 import dateutil.parser
 import datetime
 import nba
+import nba.utils
 import logging
 
 logger = logging.getLogger(__name__)
 
-def fetch_players(self, season=None, only_current=1):
+def fetch_players(season=None, only_current=1):
     logger.info('Downloading player data...')
     if not season:
         # if the user does not specify a season download all seasons
@@ -38,8 +39,8 @@ def fetch_players(self, season=None, only_current=1):
             'birthdate': dateutil.parser.parse(player['BIRTHDATE']).date(),
             'height': player['HEIGHT'] or None,
             'weight': player['WEIGHT'] or None, 
-            'from_year': datetime.datetime(player['FROM_YEAR'], 10, 1),
-            'to_year': datetime.datetime(player['TO_YEAR'], 6, 1),
+            'from_year': nba.utils.season_start(player['FROM_YEAR']),
+            'to_year': nba.utils.season_end(player['TO_YEAR']),
             'position': player['POSITION'] or None,
         }
 
@@ -49,7 +50,7 @@ def fetch_players(self, season=None, only_current=1):
     return players.values()
 
 
-def fetch_teams(self, season=None):
+def fetch_teams(season=None):
     logger.info('Downloading team data...')
     if not season:
         season = nba.CURRENT_SEASON
@@ -75,9 +76,22 @@ def fetch_teams(self, season=None):
     return teams.values()
 
 
-#  def fetch_team_rosters(self, season=nba.utils.split_season(nba.CURRENT_SEASON)):
-    #  for t in nba_py.team.TeamList(season=season.raw).info():
-        #  for p in nba_py.team.TeamCommonRoster(season=season.raw).roster():
+def fetch_team_rosters(season=nba.utils.valid_season(nba.CURRENT_SEASON)):
+    # use dictionary to ensure uniqueness
+    players = {}
+    for t in nba_py.team.TeamList().info():
+        for p in nba_py.team.TeamCommonRoster(season=season.raw,
+                                              team_id=t['TEAM_ID']).roster():
+            player = {
+                'player': p['PLAYER_ID'],
+                'team': t['TEAM_ID'],
+                'season_start': season.start,
+                'season_end': season.end
+            }
+            logger.info(player) 
+            players[player['player']] = player
+
+    return players.values()
             
 
 

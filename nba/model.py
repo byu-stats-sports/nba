@@ -65,6 +65,10 @@ class TeamRoster(orm.Model):
     season_start = orm.DateField()
     season_end = orm.DateField()
     
+    @db.atomic()
+    def add(players):
+        return TeamRoster.insert_many(players).execute()
+
     class Meta:
         database = db
         db_table = 'team_roster'

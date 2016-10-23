@@ -11,7 +11,6 @@ import nba
 import nba.model
 import nba.core
 import nba.utils
-from collections import namedtuple
 import sys
 
 

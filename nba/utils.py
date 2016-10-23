@@ -1,7 +1,8 @@
 import nba
 import argparse
 import logging
-from datetime import datetime, date
+import datetime
+from collections import namedtuple
 
 
 def log_level(verbosity_count):
@@ -31,7 +32,7 @@ def valid_date(date, date_format="%m/%d/%Y"):
             the specified format.
     """
     try:
-        return datetime.strptime(date, date_format)
+        return datetime.datetime.strptime(date, date_format)
     except ValueError:
         msg = "Not a valid date: '{0}'.".format(date)
         raise argparse.ArgumentTypeError(msg)
@@ -63,6 +64,12 @@ def valid_date_range(s):
         raise argparse.ArgumentTypeError(msg)
     return (start, end)
 
+def season_start(year):
+    return datetime.datetime(year, 10, 1)
+
+def season_end(year):
+    return datetime.datetime(year, 6, 1)
+
 def split_season(season):
     # NOTE: assumes 4 digit years...
     if not '-' in season or not len(season) == 7:
@@ -70,9 +77,9 @@ def split_season(season):
         raise argparse.ArgumentTypeError(msg)
     start_year = int(season.split('-')[0])
     end_year = start_year + 1
-    return (start_year, end_year)
+    return (season_start(start_year), season_end(end_year))
 
 def valid_season(s=nba.CURRENT_SEASON):
-    Season = namedtuple('Season', ['raw', 'start_year', 'end_year'])
-    return Season(s, *_split_season(s))
+    Season = namedtuple('Season', ['raw', 'start', 'end'])
+    return Season(s, *split_season(s))
 
