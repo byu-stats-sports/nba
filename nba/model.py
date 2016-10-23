@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 db = connect(DATABASE_URL)
 
 
-class Team(orm.Model):
+class Teams(orm.Model):
     team_id = orm.PrimaryKeyField()
     abbreviation = orm.CharField(null=True)
     nickname = orm.CharField(null=True)
@@ -25,13 +25,13 @@ class Team(orm.Model):
 
     @db.atomic()
     def add(teams):
-        return Team.insert_many(teams).execute()
+        return Teams.insert_many(teams).execute()
 
     class Meta:
         database = db
 
 
-class Player(orm.Model):
+class Players(orm.Model):
     player_id = orm.PrimaryKeyField()
 
     first_name = orm.CharField()
@@ -52,14 +52,14 @@ class Player(orm.Model):
 
     @db.atomic()
     def add(players):
-        return Player.insert_many(players).execute()
+        return Players.insert_many(players).execute()
 
     class Meta:
         database = db
         order_by = ('last_name', 'first_name', '-birthdate')
 
 
-class TeamRoster(orm.Model):
+class TeamRosters(orm.Model):
     player = orm.ForeignKeyField(Player, to_field='player_id', related_name='player')
     team = orm.ForeignKeyField(Team, to_field='team_id', related_name='team')
     season_start = orm.DateField()
@@ -67,11 +67,11 @@ class TeamRoster(orm.Model):
     
     @db.atomic()
     def add(players):
-        return TeamRoster.insert_many(players).execute()
+        return TeamRosters.insert_many(players).execute()
 
     class Meta:
         database = db
-        db_table = 'team_roster'
+        db_table = 'team_rosters'
 
 
 def create_tables():
