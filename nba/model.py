@@ -64,7 +64,7 @@ class TeamRosters(orm.Model):
     team = orm.ForeignKeyField(Teams, related_name='team')
     season_start = orm.DateField()
     season_end = orm.DateField()
-    
+
     @db.atomic()
     def add(players):
         return TeamRosters.insert_many(players).execute()
@@ -78,14 +78,15 @@ class Games(orm.Model):
     game_id = orm.PrimaryKeyField()
     season_start = orm.DateField()
     season_end = orm.DateField()
+    date = orm.DateField()
+    #  time
+    duration = orm.IntegerField(verbose_name='duration in minutes')
+    periods = orm.IntegerField()
+    attendance = orm.IntegerField()
     home_team = orm.ForeignKeyField(Teams, related_name='home_team')
     visitor_team = orm.ForeignKeyField(Teams, related_name='visitor_team')
     winner_team = orm.ForeignKeyField(Teams, related_name='winner_team')
     loser_team = orm.ForeignKeyField(Teams, related_name='loser_team')
-    date = orm.DateField()
-    #  time
-    duration = orm.IntegerField(verbose_name='duration in minutes')
-    attendance = orm.IntegerField()
 
     @db.atomic()
     def add(games):
@@ -94,6 +95,18 @@ class Games(orm.Model):
     class Meta:
         database = db
 
+class GamesMissedByPlayer(orm.Model):
+    game = orm.ForeignKeyField(Games, related_name='game')
+    player = orm.ForeignKeyField(Players, related_name='missed_player')
 
-def create_tables(tables=[Teams, Players, TeamRosters, Games]):
+    @db.atomic()
+    def add(games):
+        return GamesMissedByPlayer.insert_many(games).execute()
+
+    class Meta:
+        database = db
+        db_table = 'games_missed_by_player'
+
+def create_tables(tables=[Teams, Players, TeamRosters, Games,
+                          GamesMissedByPlayer]):
     db.create_tables(tables, safe=True)
