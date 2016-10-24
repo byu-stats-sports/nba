@@ -60,8 +60,8 @@ class Players(orm.Model):
 
 
 class TeamRosters(orm.Model):
-    player = orm.ForeignKeyField(Player, to_field='player_id', related_name='player')
-    team = orm.ForeignKeyField(Team, to_field='team_id', related_name='team')
+    player = orm.ForeignKeyField(Players, related_name='player')
+    team = orm.ForeignKeyField(Teams, related_name='team')
     season_start = orm.DateField()
     season_end = orm.DateField()
     
@@ -74,5 +74,26 @@ class TeamRosters(orm.Model):
         db_table = 'team_rosters'
 
 
-def create_tables():
-    db.create_tables([Team, Player, TeamRoster], safe=True)
+class Games(orm.Model):
+    game_id = orm.PrimaryKeyField()
+    season_start = orm.DateField()
+    season_end = orm.DateField()
+    home_team = orm.ForeignKeyField(Teams, related_name='home_team')
+    visitor_team = orm.ForeignKeyField(Teams, related_name='visitor_team')
+    winner_team = orm.ForeignKeyField(Teams, related_name='winner_team')
+    loser_team = orm.ForeignKeyField(Teams, related_name='loser_team')
+    date = orm.DateField()
+    #  time
+    duration = orm.IntegerField(verbose_name='duration in minutes')
+    attendance = orm.IntegerField()
+
+    @db.atomic()
+    def add(games):
+        return Games.insert_many(games).execute()
+
+    class Meta:
+        database = db
+
+
+def create_tables(tables=[Teams, Players, TeamRosters, Games]):
+    db.create_tables(tables, safe=True)

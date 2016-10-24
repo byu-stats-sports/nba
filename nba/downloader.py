@@ -1,5 +1,7 @@
 import nba_py.player
 import nba_py.team
+import nba_py.game
+import nba_py.league
 import dateutil.parser
 import datetime
 import nba
@@ -11,16 +13,13 @@ logger = logging.getLogger(__name__)
 def fetch_players(season=None, only_current=1):
     logger.info('Downloading player data...')
     if not season:
-        # if the user does not specify a season download all seasons
-        season = nba.CURRENT_SEASON
+        season = nba.utils.valid_season(nba.CURRENT_SEASON)
+        # if the user does not specify a season, download all seasons
         only_current = 0
-    else:
-        season = season.raw
 
     # use dictionary to ensure uniqueness
     players = {}
-
-    for p in nba_py.player.PlayerList(season=season, 
+    for p in nba_py.player.PlayerList(season=season.raw, 
                                       only_current=only_current).info():
         if p['GAMES_PLAYED_FLAG'] is 'N':
             continue
@@ -50,12 +49,8 @@ def fetch_players(season=None, only_current=1):
     return players.values()
 
 
-def fetch_teams(season=None):
+def fetch_teams():
     logger.info('Downloading team data...')
-    if not season:
-        season = nba.CURRENT_SEASON
-    else:
-        season = season.raw
 
     # use dictionary to ensure uniqueness
     teams = {}
@@ -76,7 +71,12 @@ def fetch_teams(season=None):
     return teams.values()
 
 
-def fetch_team_rosters(season=nba.utils.valid_season(nba.CURRENT_SEASON)):
+def fetch_team_rosters(season=None):
+    logger.info('Downloading team rosters data...')
+
+    if not season:
+        season = nba.utils.valid_season(nba.CURRENT_SEASON)
+
     # use dictionary to ensure uniqueness
     players = {}
     for t in nba_py.team.TeamList().info():
@@ -92,6 +92,4 @@ def fetch_team_rosters(season=nba.utils.valid_season(nba.CURRENT_SEASON)):
             players[player['player']] = player
 
     return players.values()
-            
-
 
