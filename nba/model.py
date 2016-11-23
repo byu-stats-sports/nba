@@ -81,8 +81,17 @@ class Games(orm.Model):
         database = db
 
 
-class GamesMissedByPlayer(orm.Model):
+class GamesByPlayer(orm.Model):
     game = orm.ForeignKeyField(Games, related_name='game')
+    player = orm.ForeignKeyField(Players, related_name='player_by_game')
+
+    class Meta:
+        database = db
+        db_table = 'games_by_player'
+
+
+class GamesMissedByPlayer(orm.Model):
+    game = orm.ForeignKeyField(Games, related_name='missed_game')
     player = orm.ForeignKeyField(Players, related_name='missed_player')
 
     class Meta:
@@ -110,9 +119,7 @@ def update(model, data):
     logger.debug(pformat(list(data)))
     for item in data:
         try:
-            model.insert(**item).execute()
-            # faster but will not commit data if an error is encountered 
-            #  return orm.InsertQuery(model, rows=data).upsert().execute()
+            orm.InsertQuery(model, field_dict=item).upsert().execute()
         except orm.IntegrityError as e:
             # seems to be the only way to access e.errno
             # TODO: figure out a better way to only print when not a duplicate key
