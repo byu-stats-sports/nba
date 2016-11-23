@@ -113,6 +113,8 @@ def fetch_team_rosters(season=None):
 
 
 def fetch_games(season=None):
+    logger.info('Downloading game data...')
+    
     # TODO: add points for each team?
     if not season:
         season = nba.utils.valid_season(nba.CURRENT_SEASON)
@@ -155,3 +157,42 @@ def fetch_games(season=None):
         games.append(game)
 
     return (games, inactive_players)
+
+
+def fetch_games_by_player(season=None):
+    logger.info('Downloading game by player data...')
+    
+    if not season:
+        season = nba.utils.valid_season(nba.CURRENT_SEASON)
+ 
+    games = []
+    for g in nba_py.league.GameLog(season=season.raw,
+                                   counter=10000000,
+                                   player_or_team='P').overall():
+        game = {
+            'game': int(g['GAME_ID']),
+            'player': int(g['PLAYER_ID']),
+            'team': int(g['TEAM_ID']),
+            'minutes_played': g['MIN'],
+            'points': g['PTS'],
+            'plus_minus': g['PLUS_MINUS'],
+            'assists': g['AST'],
+            'steals': g['STL'],
+            'blocks': g['BLK'],
+            'turnovers': g['TOV'],
+            'rebounds': g['REB'],
+            'offensive_rebounds': g['OREB'],
+            'defensive_rebounds': g['DREB'],
+            'free_throws_made': g['FTM'],
+            'free_throws_attempted': g['FTA'],
+            'free_throws_percentage': g['FT_PCT'],
+            'field_goals_made': g['FGM'],
+            'field_goals_attempted': g['FGA'],
+            'field_goals_percentage': g['FG_PCT'],
+            'three_point_field_goals_made': g['FG3M'],
+            'three_point_field_goals_attempted': g['FG3A'],
+            'three_point_field_goals_percentage': g['FG3_PCT']
+        }
+        games.append(game)
+
+    return games

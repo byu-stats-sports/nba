@@ -34,7 +34,7 @@ class Players(orm.Model):
     first_name = orm.CharField()
     last_name = orm.CharField()
     birthdate = orm.DateField()
-    height = orm.IntegerField(null=True, verbose_name='height in inches')
+    height = orm.IntegerField(null=True, help_text='height in inches')
     weight = orm.IntegerField(null=True)
 
     position = orm.CharField(null=True)
@@ -68,8 +68,7 @@ class Games(orm.Model):
     season_start = orm.DateField()
     season_end = orm.DateField()
     date = orm.DateField()
-    #  time
-    duration = orm.IntegerField(null=True, verbose_name='duration in minutes')
+    duration = orm.IntegerField(null=True, help_text='duration in minutes')
     periods = orm.IntegerField()
     attendance = orm.IntegerField()
     home_team = orm.ForeignKeyField(Teams, related_name='home_team')
@@ -82,9 +81,30 @@ class Games(orm.Model):
 
 
 class GamesByPlayer(orm.Model):
+    # FIXME: deafult = 0 is default = NULL
     game = orm.ForeignKeyField(Games, related_name='game')
     player = orm.ForeignKeyField(Players, related_name='player_by_game')
-
+    team = orm.ForeignKeyField(Teams, related_name='team_by_game')
+    minutes_played = orm.IntegerField()
+    points = orm.IntegerField(default=0.0)
+    plus_minus = orm.IntegerField(default=0.0)
+    assists = orm.IntegerField(default=0.0)
+    steals = orm.IntegerField(default=0.0)
+    blocks = orm.IntegerField(default=0.0)
+    turnovers = orm.IntegerField(default=0.0)
+    rebounds = orm.IntegerField(default=0.0)
+    offensive_rebounds = orm.IntegerField(default=0.0)
+    defensive_rebounds = orm.IntegerField(default=0.0)
+    free_throws_made = orm.IntegerField(default=0.0)
+    free_throws_attempted = orm.IntegerField(default=0.0)
+    free_throws_percentage = orm.FloatField(null=True)
+    field_goals_made = orm.IntegerField(default=0.0)
+    field_goals_attempted = orm.IntegerField(default=0.0)
+    field_goals_percentage = orm.FloatField(null=True)
+    three_point_field_goals_made = orm.IntegerField(default=0.0)
+    three_point_field_goals_attempted = orm.IntegerField(default=0.0)
+    three_point_field_goals_percentage = orm.FloatField(null=True)
+    
     class Meta:
         database = db
         db_table = 'games_by_player'
@@ -93,14 +113,14 @@ class GamesByPlayer(orm.Model):
 class GamesMissedByPlayer(orm.Model):
     game = orm.ForeignKeyField(Games, related_name='missed_game')
     player = orm.ForeignKeyField(Players, related_name='missed_player')
-
+   
     class Meta:
         database = db
         db_table = 'games_missed_by_player'
 
 
 def create_tables(tables=[Teams, Players, TeamRosters, Games,
-                          GamesMissedByPlayer]):
+                          GamesMissedByPlayer, GamesByPlayer]):
     db.create_tables(tables, safe=True)
 
 
