@@ -64,12 +64,13 @@ def valid_date_range(s):
         raise argparse.ArgumentTypeError(msg)
     return (start, end)
 
-
 def season_start(year):
+    # NOTE: assumes an NBA season starts on October 1
     return datetime.datetime(year, 10, 1)
 
 
 def season_end(year):
+    # NOTE: assumes an NBA season ends on June 1
     return datetime.datetime(year, 6, 1)
 
 

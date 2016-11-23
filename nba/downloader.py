@@ -2,11 +2,13 @@ import nba_py.player
 import nba_py.team
 import nba_py.game
 import nba_py.league
+import nba_py.draftcombine
 import dateutil.parser
 import datetime
 import nba
 import nba.utils
 import logging
+from pprint import pprint 
 
 logger = logging.getLogger(__name__)
 
@@ -16,6 +18,18 @@ def fetch_players(season=None, only_current=1):
         season = nba.utils.valid_season(nba.CURRENT_SEASON)
         # if the user does not specify a season, download all seasons
         only_current = 0
+
+    draft_combine = {}
+    # TODO: handle only_current season...
+    for p in nba_py.draftcombine.DrillResults(season=season.raw).overall():
+        player = {
+            'bench_press': p['BENCH_PRESS'],
+            'three_quarter_sprint': p['THREE_QUARTER_SPRINT'],
+            'lane_agility_time': p['LANE_AGILITY_TIME'],
+            'modified_lane_agility_time': p['MODIFIED_LANE_AGILITY_TIME'],
+            'standing_vertical_leap': p['STANDING_VERTICAL_LEAP']
+        }
+        draft_combine[p['PLAYER_NAME']] = player
 
     # use dictionary to ensure uniqueness
     players = {}
@@ -30,18 +44,26 @@ def fetch_players(season=None, only_current=1):
             continue
 
         player_id = player['PERSON_ID']
-        # NOTE: assumes an NBA starts on October 1 and ends June 1
+        first_name = player['FIRST_NAME']
+        last_name = player['LAST_NAME']
         player = {
             'player_id': player_id,
-            'first_name': player['FIRST_NAME'],
-            'last_name': player['LAST_NAME'],
+            'first_name': first_name,
+            'last_name': last_name,
             'birthdate': dateutil.parser.parse(player['BIRTHDATE']).date(),
-            'height': player['HEIGHT'] or None,
+            'height': player['HEIGHT'] or None, # FIXME: make inches...
             'weight': player['WEIGHT'] or None,
             'from_year': nba.utils.season_start(player['FROM_YEAR']),
             'to_year': nba.utils.season_end(player['TO_YEAR']),
             'position': player['POSITION'] or None,
         }
+        
+        try:
+            # TODO: is there any better way of id than first and last name?
+            player.update(draft_combine[p['DISPLAY_FIRST_LAST']])
+        except:
+            pass
+        
         players[player_id] = player
 
     return players.values()

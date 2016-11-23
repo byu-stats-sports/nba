@@ -41,10 +41,10 @@ class Players(orm.Model):
     from_year = orm.DateField()
     to_year = orm.DateField()
 
-    lane_agility_time = orm.DecimalField(null=True)
-    modified_lane_agility_time = orm.DecimalField(null=True)
-    standing_vertical_leap = orm.DecimalField(null=True)
-    three_quarter_sprint = orm.DecimalField(null=True)
+    lane_agility_time = orm.FloatField(null=True)
+    modified_lane_agility_time = orm.FloatField(null=True)
+    standing_vertical_leap = orm.FloatField(null=True)
+    three_quarter_sprint = orm.FloatField(null=True)
     bench_press = orm.IntegerField(null=True)
 
     class Meta:
