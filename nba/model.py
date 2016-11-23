@@ -34,7 +34,7 @@ class Players(orm.Model):
     first_name = orm.CharField()
     last_name = orm.CharField()
     birthdate = orm.DateField()
-    height = orm.CharField(null=True)
+    height = orm.IntegerField(null=True, verbose_name='height in inches')
     weight = orm.IntegerField(null=True)
 
     position = orm.CharField(null=True)
@@ -120,6 +120,7 @@ def update(model, data):
     for item in data:
         try:
             orm.InsertQuery(model, field_dict=item).upsert().execute()
+        # TODO: fix IntegrityError due to `Cannot delete or update a parent row: a foreign key constraint fails`
         except orm.IntegrityError as e:
             # seems to be the only way to access e.errno
             # TODO: figure out a better way to only print when not a duplicate key

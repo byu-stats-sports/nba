@@ -51,7 +51,7 @@ def fetch_players(season=None, only_current=1):
             'first_name': first_name,
             'last_name': last_name,
             'birthdate': dateutil.parser.parse(player['BIRTHDATE']).date(),
-            'height': player['HEIGHT'] or None, # FIXME: make inches...
+            'height': nba.utils.height_in_inches(player['HEIGHT'] or None),
             'weight': player['WEIGHT'] or None,
             'from_year': nba.utils.season_start(player['FROM_YEAR']),
             'to_year': nba.utils.season_end(player['TO_YEAR']),

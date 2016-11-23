@@ -64,6 +64,7 @@ def valid_date_range(s):
         raise argparse.ArgumentTypeError(msg)
     return (start, end)
 
+
 def season_start(year):
     # NOTE: assumes an NBA season starts on October 1
     return datetime.datetime(year, 10, 1)
@@ -89,8 +90,30 @@ def valid_season(s=nba.CURRENT_SEASON):
     return Season(s, *split_season(s))
 
 
+def height_in_inches(height):
+    """Convert height string to inches. (e.g. 6-9 -> 81)
+
+    Args:
+        height (str): A height in the format: ft-inches
+
+    Returns:
+        inches: The height in inches.
+    """
+    try:
+        inches = int(height)
+    except (ValueError, TypeError):
+        inches = None
+        height = str(height).split('-')
+        if len(height) is 2:
+            try:
+                inches = (int(height[0]) * 12) + int(height[1])
+            except:
+                inches = None
+    return inches
+
+
 def duration_in_minutes(duration):
-    """Convert duration to minutes. (e.g. 1:09 -> 69)
+    """Convert duration string to minutes. (e.g. 1:09 -> 69)
 
     Args:
         duration (str): A duration in the format: hh:mm
