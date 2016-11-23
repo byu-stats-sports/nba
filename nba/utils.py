@@ -64,11 +64,14 @@ def valid_date_range(s):
         raise argparse.ArgumentTypeError(msg)
     return (start, end)
 
+
 def season_start(year):
     return datetime.datetime(year, 10, 1)
 
+
 def season_end(year):
     return datetime.datetime(year, 6, 1)
+
 
 def split_season(season):
     # NOTE: assumes 4 digit years...
@@ -79,7 +82,27 @@ def split_season(season):
     end_year = start_year + 1
     return (season_start(start_year), season_end(end_year))
 
+
 def valid_season(s=nba.CURRENT_SEASON):
     Season = namedtuple('Season', ['raw', 'start', 'end'])
     return Season(s, *split_season(s))
+
+
+def duration_in_minutes(duration):
+    """Convert duration to minutes. (e.g. 1:09 -> 69)
+
+    Args:
+        duration (str): A duration in the format: hh:mm
+
+    Returns:
+        minutes: The duration in minutes.
+    """
+    minutes = None
+    duration = str(duration).split(':')
+    if len(duration) is 2:
+        try:
+            minutes = (int(duration[0]) * 60) + int(duration[1])
+        except:
+            minutes = None
+    return minutes
 
