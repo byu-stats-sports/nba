@@ -35,11 +35,14 @@ def parse_args():
     
     season_example = nba.CURRENT_SEASON
     parser.add_argument('-s', '--season', action='store', type=nba.utils.valid_season,
-                    help='dash separated year range '
-                         '(example: {0})'.format(season_example))
+			help='dash separated year range '
+			'(example: {0})'.format(season_example))
 
-    parser.add_argument("-v", "--verbose", action="count",
-                        help="increase output verbosity")
+    parser.add_argument('--no-update', dest='should_update', action='store_false',
+			help='only download data; do not update database')
+
+    parser.add_argument('-v', '--verbose', action='count',
+                        help='increase output verbosity')
 
     return parser.parse_args()
 
@@ -50,7 +53,7 @@ def main():
     logging.basicConfig(level=nba.utils.log_level(args.verbose),
                         format='%(levelname)s: %(message)s')
     start, end = args.date
-    nba.core.add(args.season)
+    nba.core.update(args.season, args.should_update)
     
 if __name__ == '__main__':
     try:

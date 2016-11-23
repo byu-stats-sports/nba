@@ -2,11 +2,15 @@ import nba.downloader
 import nba.model
 
 
-def add(season):
-    nba.model.create_tables()
-    nba.model.Teams.add(nba.downloader.fetch_teams())
-    nba.model.Players.add(nba.downloader.fetch_players(season))
-    nba.model.TeamRosters.add(nba.downloader.fetch_team_rosters(season))
+def update(season, should_update=True):
+    teams = nba.downloader.fetch_teams()
+    players = nba.downloader.fetch_players()
+    team_rosters = nba.downloader.fetch_team_rosters()
     games, inactive_players_games = nba.downloader.fetch_games(season)
-    nba.model.Games.add(games)
-    nba.model.GamesMissedByPlayer.add(inactive_players_games)
+    if should_update:
+        nba.model.create_tables()
+        nba.model.update(nba.model.Teams, teams)
+        nba.model.update(nba.model.Players, players)
+        nba.model.update(nba.model.TeamRosters, team_rosters)
+        nba.model.update(nba.model.Games, games)
+        nba.model.update(nba.model.GamesMissedByPlayer, inactive_players_games)

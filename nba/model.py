@@ -3,6 +3,7 @@ from playhouse.db_url import connect
 import nba
 from nba import DATABASE_URL
 import logging
+from pprint import pformat, pprint
 
 logger = logging.getLogger(__name__)
 
@@ -22,10 +23,6 @@ class Teams(orm.Model):
     generalmanager = orm.CharField(null=True)
     headcoach = orm.CharField(null=True)
     dleagueaffiliation = orm.TextField(null=True)
-
-    @db.atomic()
-    def add(teams):
-        return Teams.insert_many(teams).execute()
 
     class Meta:
         database = db
@@ -50,10 +47,6 @@ class Players(orm.Model):
     three_quarter_sprint = orm.DecimalField(null=True)
     bench_press = orm.IntegerField(null=True)
 
-    @db.atomic()
-    def add(players):
-        return Players.insert_many(players).execute()
-
     class Meta:
         database = db
         order_by = ('last_name', 'first_name', '-birthdate')
@@ -64,10 +57,6 @@ class TeamRosters(orm.Model):
     team = orm.ForeignKeyField(Teams, related_name='team')
     season_start = orm.DateField()
     season_end = orm.DateField()
-
-    @db.atomic()
-    def add(players):
-        return TeamRosters.insert_many(players).execute()
 
     class Meta:
         database = db
@@ -80,7 +69,7 @@ class Games(orm.Model):
     season_end = orm.DateField()
     date = orm.DateField()
     #  time
-    duration = orm.IntegerField(verbose_name='duration in minutes')
+    duration = orm.IntegerField(null=True, verbose_name='duration in minutes')
     periods = orm.IntegerField()
     attendance = orm.IntegerField()
     home_team = orm.ForeignKeyField(Teams, related_name='home_team')
@@ -88,25 +77,45 @@ class Games(orm.Model):
     winner_team = orm.ForeignKeyField(Teams, related_name='winner_team')
     loser_team = orm.ForeignKeyField(Teams, related_name='loser_team')
 
-    @db.atomic()
-    def add(games):
-        return Games.insert_many(games).execute()
-
     class Meta:
         database = db
+
 
 class GamesMissedByPlayer(orm.Model):
     game = orm.ForeignKeyField(Games, related_name='game')
     player = orm.ForeignKeyField(Players, related_name='missed_player')
 
-    @db.atomic()
-    def add(games):
-        return GamesMissedByPlayer.insert_many(games).execute()
-
     class Meta:
         database = db
         db_table = 'games_missed_by_player'
 
+
 def create_tables(tables=[Teams, Players, TeamRosters, Games,
                           GamesMissedByPlayer]):
     db.create_tables(tables, safe=True)
+
+
+@db.atomic()
+def add(model, data):
+    logger.info('Adding data to the {0} database table...'
+                .format(model._meta.db_table))
+    logger.debug(pformat(list(data)))
+    return model.insert_many(data).execute()
+
+
+@db.atomic()
+def update(model, data):
+    logger.info('Updating the {0} database table...'
+                .format(model._meta.db_table))
+    logger.debug(pformat(list(data)))
+    for item in data:
+        try:
+            model.insert(**item).execute()
+            # faster but will not commit data if an error is encountered 
+            #  return orm.InsertQuery(model, rows=data).upsert().execute()
+        except orm.IntegrityError as e:
+            # seems to be the only way to access e.errno
+            # TODO: figure out a better way to only print when not a duplicate key
+            if e.args[0] != 1062:
+                logger.warning('{}: {!r}'.format(item, e))
+            continue

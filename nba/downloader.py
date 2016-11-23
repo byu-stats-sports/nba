@@ -42,8 +42,6 @@ def fetch_players(season=None, only_current=1):
             'to_year': nba.utils.season_end(player['TO_YEAR']),
             'position': player['POSITION'] or None,
         }
-
-        logger.info(player)
         players[player_id] = player
 
     return players.values()
@@ -65,7 +63,6 @@ def fetch_teams():
         team['MIN_YEAR'] = datetime.datetime(int(t['MIN_YEAR']), 1, 1)
         team['MAX_YEAR'] = datetime.datetime(int(t['MAX_YEAR']), 1, 1)
         team = dict((k.lower(), v) for k, v in team.items())
-        logger.info(team)
         teams[team['team_id']] = team
 
     return teams.values()
@@ -88,13 +85,13 @@ def fetch_team_rosters(season=None):
                 'season_start': season.start,
                 'season_end': season.end
             }
-            logger.info(player)
             players[player['player']] = player
 
     return players.values()
 
 
 def fetch_games(season=None):
+    # TODO: add points for each team?
     if not season:
         season = nba.utils.valid_season(nba.CURRENT_SEASON)
 
@@ -116,19 +113,16 @@ def fetch_games(season=None):
         for p in game.inactive_players():
             player = {'game': int(game_id), 'player': p['PLAYER_ID']}
             inactive_players.append(player)
-        logger.info('inactive players {0}'.format(inactive_players))
 
         game_info = game.game_info()[0]
         game_summary = game.game_summary()[0]
-        # NOTE: assumes the duration format is like '2:09'
-        duration = str(game_info['GAME_TIME']).split(':')
 
         game = {
             'game_id': game_id,
             'season_start': season.start,
             'season_end': season.end,
             'date': dateutil.parser.parse(game_summary['GAME_DATE_EST']).date(),
-            'duration': (int(duration[0]) * 60) + int(duration[1]),
+            'duration': nba.utils.duration_in_minutes(game_info['GAME_TIME']),
             'periods': game_summary['LIVE_PERIOD'],
             'attendance': game_info['ATTENDANCE'],
             'home_team': game_summary['HOME_TEAM_ID'],
@@ -136,8 +130,6 @@ def fetch_games(season=None):
             'winner_team': winners[game_id],
             'loser_team': losers[game_id]
         }
-        #  logger.info(game)
         games.append(game)
 
     return (games, inactive_players)
-
