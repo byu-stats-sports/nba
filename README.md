@@ -22,6 +22,8 @@ pip install requests-cache
   ```
 
 1. Configure the database setting, replacing `<user>`, `<password>`, `<host>` with the appropriate values:
+
+Add `export BYU_NBA_DATABASE_URL="mysql://<user>:<password>@<host>/nba"` to your `~/.bash_profile`:
   
   ```
   echo 'export BYU_NBA_DATABASE_URL="mysql://<user>:<password>@<host>/nba"' >> ~/.bash_profile
