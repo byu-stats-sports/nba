@@ -17,7 +17,7 @@ pip install requests-cache
   pip install git+git://github.com/byu-stats-sports/nba.git
   ```
 
-2. Configure the database settings (replacing `<user>`, `<password>`, `<host>`):
+2. Configure the database setting, replacing `<user>`, `<password>`, `<host>` with the appropriate values:
   
   ```
   echo 'export BYU_NBA_DATABASE_URL="mysql://<user>:<password>@<host>/nba"' >> ~/.bash_profile
