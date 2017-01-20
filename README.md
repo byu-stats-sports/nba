@@ -12,19 +12,12 @@ pip install requests-cache
 ## usage
 
 1. Set up the database settings (replacing `<user>`, `<password>`, `<host>`):
-  bash, zsh etc: 
-
+  
   Add 
   ```
   export BYU_NBA_DATABASE_URL="mysql://<user>:<password>@<host>/nba"
   ``` 
   to your `~/.bashrc`, `~/.bash_profile`, `~/.profile` or similar shell startup file.
-
-  [fish shell](https://fishshell.com):
-  
-  ```
-  set -U BYU_NBA_DATABASE_URL 'mysql://<user>:<password>@<host>/nba'
-  ```
   
   _NOTE_: You may also want to export `NBA_PY_CACHE_EXPIRE_MINUTES` to something more than the default `10` so that you don't have to download NBA data as much. 
   
@@ -34,7 +27,7 @@ pip install requests-cache
   pip install git+git://github.com/byu-stats-sports/nba.git
   ```
 
-3. Get help:
+3. Get help on how to use the app:
   
   ```
   nba --help
