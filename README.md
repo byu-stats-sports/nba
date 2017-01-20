@@ -26,7 +26,7 @@ pip install requests-cache
   set -U BYU_NBA_DATABASE_URL 'mysql://<user>:<password>@<host>/nba'
   ```
   
-  You may also want to export `NBA_PY_CACHE_EXPIRE_MINUTES` to something more than the default `10` so that you don't have to download NBA data as much. 
+  _NOTE_: You may also want to export `NBA_PY_CACHE_EXPIRE_MINUTES` to something more than the default `10` so that you don't have to download NBA data as much. 
   
 2. Ensure that you have `pip` installed and then install the package:
   
@@ -40,7 +40,7 @@ pip install requests-cache
   nba --help
   ```
 
-## devlop
+## develop
 
 1. Get the source:
   
