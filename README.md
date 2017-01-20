@@ -20,10 +20,13 @@ Downloads data using the [stats.nba.com](http://stats.nba.com) API via the [nba_
   ```
   
 2. Ensure that you have `pip` installed and then install the package:
+  
   ```
   pip install git+git://github.com/byu-stats-sports/nba.git
   ```
+
 3. Get help:
+  
   ```
   nba --help
   ```
@@ -31,10 +34,13 @@ Downloads data using the [stats.nba.com](http://stats.nba.com) API via the [nba_
 ## devlop
 
 1. Get the source:
+  
   ```
   git clone https://github.com/byu-stats-sports/nba.git
   ```
+  
 2. Install the application: 
+  
   ```
   pip install --editable nba/
   ```
