@@ -28,7 +28,7 @@ pip install requests-cache
 1. Install the app:
   
   ```
-  pip install git+git://github.com/byu-stats-sports/nba.git
+  pip install git+https://github.com/byu-stats-sports/nba.git
   ```
   
 1. Get help on how to use the app:
