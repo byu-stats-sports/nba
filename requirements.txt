@@ -1,6 +1,0 @@
-peewee
-nba_py
-requests-cache
-PyMySQL
-# MySQL-python
-python-dateutil
