@@ -27,7 +27,8 @@ setup(
     install_requires=[
         'nba_py',
         'peewee', 
-        'requests-cache'
+        'requests-cache,
+        'python-dateutil'
     ],
     license=nba.__licence__,
     zip_safe=False,
