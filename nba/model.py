@@ -144,5 +144,7 @@ def update(model, data):
         except orm.IntegrityError as e:
             # seems to be the only way to access e.errno
             # TODO: figure out a better way to only print when not a duplicate key
-            
+            if e.args[0] != 1062:
+                logger.warning('{}: {!r}'.format(item, e))
+
                 # raise e  # TODO: we might want to raise errors that are anything besides duplicate key errors 
