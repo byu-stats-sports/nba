@@ -141,10 +141,10 @@ def update(model, data):
         try:
             orm.InsertQuery(model, field_dict=item).upsert().execute()
         # TODO: fix IntegrityError due to `Cannot delete or update a parent row: a foreign key constraint fails`
-        except orm.IntegrityError as e:
+        #except orm.IntegrityError as e:
             # seems to be the only way to access e.errno
             # TODO: figure out a better way to only print when not a duplicate key
-            if e.args[0] != 1062:
-                logger.warning('{}: {!r}'.format(item, e))
+            #if e.args[0] != 1062:
+                #logger.warning('{}: {!r}'.format(item, e))
 
                 # raise e  # TODO: we might want to raise errors that are anything besides duplicate key errors 
