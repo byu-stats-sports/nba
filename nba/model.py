@@ -119,7 +119,7 @@ class GamesMissedByPlayer(orm.Model):
         db_table = 'games_missed_by_player'
 
 
-def create_tables(tables=[Teams, Players, TeamRosters, Games,
+def create_tables(tables=[Players, Teams, TeamRosters, Games,
                           GamesMissedByPlayer, GamesByPlayer]):
     db.create_tables(tables, safe=True)
 
