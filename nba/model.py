@@ -138,7 +138,7 @@ def update(model, data):
                 .format(model._meta.db_table))
     logger.debug(pformat(list(data)))
     for item in data:
-        try:
+        #try:
             orm.InsertQuery(model, field_dict=item).upsert().execute()
         # TODO: fix IntegrityError due to `Cannot delete or update a parent row: a foreign key constraint fails`
         #except orm.IntegrityError as e:
