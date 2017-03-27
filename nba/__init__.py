@@ -2,7 +2,7 @@
 nba - a CLI to manage BYU Sports Statistics NBA data.
 """
 import os
-
+import nba_py
 __author__ = 'William Myers'
 __version__ = '0.0.1'
 __licence__ = 'GPLv3+'
