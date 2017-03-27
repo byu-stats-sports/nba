@@ -146,4 +146,4 @@ def update(model, data):
             # TODO: figure out a better way to only print when not a duplicate key
             if e.args[0] != 1062:
                 logger.warning('{}: {!r}'.format(item, e))
-            continue
+                # raise e  # TODO: we might want to raise errors that are anything besides duplicate key errors 
