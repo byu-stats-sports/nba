@@ -11,9 +11,9 @@ def update(season, should_update=True):
     
     if should_update:
         nba.model.create_tables()
-        #nba.model.update(nba.model.Players, players)
-        #nba.model.update(nba.model.Teams, teams)
-        #nba.model.update(nba.model.TeamRosters, team_rosters)
+        nba.model.update(nba.model.Players, players)
+        nba.model.update(nba.model.Teams, teams)
+        nba.model.update(nba.model.TeamRosters, team_rosters)
         nba.model.update(nba.model.Games, games)
         nba.model.update(nba.model.GamesMissedByPlayer, inactive_players_games)
         nba.model.update(nba.model.GamesByPlayer, players_games)
