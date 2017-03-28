@@ -19,8 +19,6 @@ def fetch_players(season=None, only_current=1):
     if not season:
         season = nba.utils.valid_season(nba.CURRENT_SEASON)# if the user does not specify a season, download all seasons
         only_current = 0
-    else:
-        season = nba.utils.valid_season(season)
     draft_combine = {}# TODO: handle only_current season...
     for p in nba_py.draftcombine.DrillResults(season=season.raw).overall():
         player = {
@@ -80,9 +78,7 @@ def fetch_teams():
 def fetch_team_rosters(season=None):
     logger.info('Downloading team rosters data...')
     if not season:
-        season = nba.utils.valid_season(nba.CURRENT_SEASON)
-    else:
-        season = nba.utils.valid_season(season)# use dictionary to ensure uniqueness
+        season = nba.utils.valid_season(nba.CURRENT_SEASON)# use dictionary to ensure uniqueness
     players = {}
     for t in nba_py.team.TeamList().info():
         for p in nba_py.team.TeamCommonRoster(season=season.raw,
@@ -101,8 +97,6 @@ def fetch_games(season=None):
     logger.info('Downloading game data...')# TODO: add points for each team?
     if not season:
         season = nba.utils.valid_season(nba.CURRENT_SEASON)
-    else:
-        season = nba.utils.valid_season(season)
     winners = {}
     losers = {}
     games = [] #Testing games and inactive players as dicts instead to see if it works.
@@ -139,9 +133,7 @@ def fetch_games(season=None):
 def fetch_games_by_player(season=None):
     logger.info('Downloading game by player data...')
     if not season:
-        season = nba.utils.valid_season(nba.CURRENT_SEASON)
-    else:
-        season = nba.utils.valid_season(season)        
+        season = nba.utils.valid_season(nba.CURRENT_SEASON)        
     games = []
     for g in nba_py.league.GameLog(season=season.raw,
                                    counter=10000000,
