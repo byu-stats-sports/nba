@@ -110,7 +110,7 @@ def fetch_games(season=None):
     for g in nba_py.league.GameLog(season=season.raw,
                                    counter=10000000,
                                    player_or_team='T').overall():
-        d = winners if g['WL'] is 'W' else losers
+        d = winners if g['WL']=='W' else losers
         d[g['GAME_ID']] = g['TEAM_ID'] # all matchups in season (1230 = 15 teams * 82 games)
     for game_id in winners.keys():
         game = nba_py.game.BoxscoreSummary(game_id)
