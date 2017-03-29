@@ -6,8 +6,8 @@ def update(season, should_update=True):
     teams = nba.downloader.fetch_teams()
     players = nba.downloader.fetch_players()
     team_rosters = nba.downloader.fetch_team_rosters()
-    games, inactive_players_games = nba.downloader.fetch_games(season)
-    players_games = nba.downloader.fetch_games_by_player(season)
+    games, inactive_players_games = nba.downloader.fetch_games()
+    players_games = nba.downloader.fetch_games_by_player()
     
     if should_update:
         nba.model.create_tables()
