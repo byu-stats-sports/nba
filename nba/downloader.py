@@ -127,7 +127,7 @@ def fetch_games(season=None):
             'loser_team': losers[game_id]
         }
         if not game['attendance']:
-            game['attendance']=0
+            game['attendance']=110
         games.append(game)
     return (games, inactive_players)
 
