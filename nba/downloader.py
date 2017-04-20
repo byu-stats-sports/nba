@@ -120,7 +120,10 @@ def fetch_games(season=None):
             'date': dateutil.parser.parse(game_summary['GAME_DATE_EST']).date(),
             'duration': nba.utils.duration_in_minutes(game_info['GAME_TIME']),
             'periods': game_summary['LIVE_PERIOD'],
-            'attendance': game_info['ATTENDANCE'],
+            if not game_info['ATTENDANCE']:
+                'attendance': game_info['ATTENDANCE']=1
+            else:
+                'attendance': game_info['ATTENDANCE'],
             'home_team': game_summary['HOME_TEAM_ID'],
             'visitor_team': game_summary['VISITOR_TEAM_ID'],
             'winner_team': winners[game_id],
