@@ -1,4 +1,4 @@
-timport peewee as orm
+import peewee as orm
 from playhouse.db_url import connect
 import nba
 from nba import DATABASE_URL
