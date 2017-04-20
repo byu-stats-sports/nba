@@ -1,4 +1,4 @@
-import peewee as orm
+timport peewee as orm
 from playhouse.db_url import connect
 import nba
 from nba import DATABASE_URL
@@ -70,7 +70,7 @@ class Games(orm.Model):
     date = orm.DateField()
     duration = orm.IntegerField(null=True, help_text='duration in minutes')
     periods = orm.IntegerField()
-    attendance = orm.IntegerField(null=True)
+    attendance = orm.IntegerField(default=0)
     home_team = orm.ForeignKeyField(Teams, related_name='home_team')
     visitor_team = orm.ForeignKeyField(Teams, related_name='visitor_team')
     winner_team = orm.ForeignKeyField(Teams, related_name='winner_team')
