@@ -84,7 +84,8 @@ def fetch_team_rosters(season=None):
         for p in nba_py.team.TeamCommonRoster(season=season.raw,
                                               team_id=t['TEAM_ID']).roster():
             player = {
-                'player': p['PLAYER_ID'],
+                'player_id': p['PLAYER_ID'],
+                'player_name': p['PLAYER'],
                 'team': t['TEAM_ID'],
                 'season_start': season.start,
                 'season_end': season.end
@@ -140,7 +141,7 @@ def fetch_games_by_player(season=None):
                                    player_or_team='P').overall():
         game = {
             'game': int(g['GAME_ID']),
-            'player': int(g['PLAYER_ID']),
+            'player_id': int(g['PLAYER_ID']),
             'player_name':g['PLAYER_NAME'],
             'team': int(g['TEAM_ID']),
             'minutes_played': g['MIN'],
