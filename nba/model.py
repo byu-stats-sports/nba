@@ -53,7 +53,8 @@ class Players(orm.Model):
 
 
 class TeamRosters(orm.Model):
-    player = orm.ForeignKeyField(Players, related_name='player')
+    player_id = orm.ForeignKeyField(Players, related_name='player')
+    player_name = orm.Charfield()
     team = orm.ForeignKeyField(Teams, related_name='team')
     season_start = orm.DateField()
     season_end = orm.DateField()
@@ -83,7 +84,7 @@ class Games(orm.Model):
 class GamesByPlayer(orm.Model):
     # FIXME: deafult = 0 is default = NULL
     game = orm.ForeignKeyField(Games, related_name='game')
-    player = orm.ForeignKeyField(Players, related_name='player_by_game')
+    player_id = orm.ForeignKeyField(Players, related_name='player_by_game')
     team = orm.ForeignKeyField(Teams, related_name='team_by_game')
     player_name = orm.CharField()
     minutes_played = orm.IntegerField()
