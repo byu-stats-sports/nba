@@ -115,6 +115,8 @@ class GamesByPlayer(orm.Model):
 class GamesMissedByPlayer(orm.Model):
     game = orm.ForeignKeyField(Games, related_name='missed_game')
     player_id = orm.ForeignKeyField(Players, related_name='missed_player')
+    first_name = orm.CharField()
+    last_name = orm.CharField()
    
     class Meta:
         database = db
