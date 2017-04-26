@@ -7,7 +7,7 @@ Downloads data using the [stats.nba.com](http://stats.nba.com) API via the [nba_
  - [`python`](http://docs.python-guide.org/en/latest/starting/installation/)
  - [`pip`](https://pip.pypa.io/en/stable/installing/)
  - [`git`](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
- - Create bash profile if needed.
+ - ['create bash profile'](http://redfinsolutions.com/blog/creating-bashprofile-your-mac)
  
 ## usage
 
