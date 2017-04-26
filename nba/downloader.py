@@ -143,7 +143,7 @@ def fetch_games_by_player(season=None):
             'team': int(g['TEAM_ID']),
             'minutes_played': g['MIN'],
             'points': g['PTS'],
-            'plus_minus': g['PLUS_MINUS'],
+            #'plus_minus': g['PLUS_MINUS'],
             'assists': g['AST'],
             'steals': g['STL'],
             'blocks': g['BLK'],
