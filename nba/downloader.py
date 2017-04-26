@@ -110,7 +110,7 @@ def fetch_games(season=None):
     for game_id in winners.keys():
         game = nba_py.game.BoxscoreSummary(game_id)
         for p in game.inactive_players():
-            player = {'game': int(game_id), 'player': p['PLAYER_ID']}
+            player = {'game': int(game_id), 'player_id': p['PLAYER_ID']}
             inactive_players.append(player)
         game_info = game.game_info()[0]
         game_summary = game.game_summary()[0]
