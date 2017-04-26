@@ -86,7 +86,7 @@ class GamesByPlayer(orm.Model):
     team = orm.ForeignKeyField(Teams, related_name='team_by_game')
     minutes_played = orm.IntegerField()
     points = orm.IntegerField(default=0.0)
-    #plus_minus = orm.IntegerField(default=0.0)
+    plus_minus = orm.IntegerField(default=0)
     assists = orm.IntegerField(default=0.0)
     steals = orm.IntegerField(default=0.0)
     blocks = orm.IntegerField(default=0.0)
