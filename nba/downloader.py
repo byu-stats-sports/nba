@@ -141,6 +141,7 @@ def fetch_games_by_player(season=None):
         game = {
             'game': int(g['GAME_ID']),
             'player': int(g['PLAYER_ID']),
+            'player_name':g['PLAYER_NAME'],
             'team': int(g['TEAM_ID']),
             'minutes_played': g['MIN'],
             'points': g['PTS'],
