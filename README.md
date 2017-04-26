@@ -31,7 +31,10 @@ Downloads data using the [stats.nba.com](http://stats.nba.com) API via the [nba_
   ```
   pip install git+https://github.com/byu-stats-sports/nba.git
   ```
-  
+1. Uninstall the app:
+  ```
+  pip unininstall nba
+  ```
 1. Get help on how to use the app:
   
   ```
