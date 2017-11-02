@@ -14,7 +14,7 @@ Downloads data using the [stats.nba.com](http://stats.nba.com) API via the [nba_
 1. Fire up your terminal
 
 1. Configure (export) the database setting, replacing `<user>`, `<password>`, `<host>` with the appropriate values:
-  Open bash profile with 'open .bash_profile'
+ Open bash profile with `open ~/.bash_profile`
   Add `export BYU_NBA_DATABASE_URL="mysql://<user>:<password>@<host>/nba"` to your `~/.bash_profile`:
   add 'export PATH=/usr/local/mysql/bin:/usr/local/python/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Library/TeX/texbin'
   add export NBA_PY_CACHE_EXPIRE_MINUTES=43800 
