@@ -54,7 +54,7 @@ class Players(orm.Model):
 
 class TeamRosters(orm.Model):
     player_id = orm.ForeignKeyField(Players, related_name='player')
-    player_name = orm.Charfield()
+    player_name = orm.CharField()
     team = orm.ForeignKeyField(Teams, related_name='team')
     season_start = orm.DateField()
     season_end = orm.DateField()
